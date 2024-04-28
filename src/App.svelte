@@ -3,6 +3,9 @@
 
 	let button1text = "first request";
 	let button2text = "second request";
+	let cards = [];
+	let cur_order = 1;
+	let more_button_visible = true;
 
 	document.addEventListener("DOMContentLoaded", () => {
 		document.getElementById("button1").addEventListener("click", () => {
@@ -19,12 +22,31 @@
 				})
 			})
 		});
+		document.getElementById("more").addEventListener("click", () => {
+			fetch("https://api.sellershands.ru/api/search/search?sort=anysort&order="+cur_order).then((response) => {
+				if (response.status == 206) {
+					more_button_visible = false;
+				}
+				response.json().then((data) => {
+					cards = Array.prototype.concat(cards, data);
+					cur_order++;
+					console.log(cards);
+				})
+			})
+		});
 	})
 </script>
 
 <main>
 	<button id='button1'>{button1text}</button>
 	<button id='button2'>{button2text}</button>
+	<h1>обьявления</h1>
+	{#each cards as card}
+		<p>{card.name}</p>
+	{/each}
+	{#if more_button_visible}
+		<button id='more'>показать еще</button>
+	{/if}
 </main>
 
 <style>
