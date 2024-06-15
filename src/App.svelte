@@ -41,6 +41,8 @@
 		console.log(document.forms['formName']['authToken'].value);
 		var counter = 4;
 		Array.prototype.forEach.call(files, function (file) {
+			console.log("post index "+Math.abs(counter-5));
+			console.log(file);
 			let formData = new FormData();
 			formData.append('file', file);
 			fetch("https://api.sellershands.ru/api/cards/card/"+document.forms['formName']['cardId'].value+"/photo?" + new URLSearchParams({ authToken: document.forms['formName']['authToken'].value, number: Math.abs(counter-5) }).toString(), {
@@ -52,13 +54,15 @@
 			})
 			counter--;
 		})
-		for (let i = 0; i < counter; i++) {
-			fetch("https://api.sellershands.ru/api/cards/card/"+document.forms['formName']['cardId'].value+"/photo?"+ new URLSearchParams({ authToken: document.forms['formName']['authToken'].value, number: Math.abs(counter-5) }).toString(), {
-				method: "DELETE"
-			}).then((res) => {
-				console.log(res);
-			})
-			counter--;
+		for (let i = 4; i >= Math.abs(counter-5); i--) {
+			console.log("delete index "+i);
+				fetch("https://api.sellershands.ru/api/cards/card/"+document.forms['formName']['cardId'].value+"/photo?"+ new URLSearchParams({ authToken: document.forms['formName']['authToken'].value, number: i }).toString(), {
+					method: "DELETE"
+				}).then((res) => {
+					console.log(res);
+				}).catch((e) => {
+					
+				})
 		}
 		return false;
 	}
